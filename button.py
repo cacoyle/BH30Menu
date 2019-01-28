@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import RPi.GPIO as GPIO
 from time import sleep
 import lcddriver
@@ -7,7 +7,7 @@ lcd = lcddriver.lcd()
 lcd.lcd_clear()
 lcd.lcd_display_string("CMC BH-30 Controller", 1)
 lcd.lcd_display_string("", 2)
-#lcd.lcd_display_string("12345678901234567890", 3)
+lcd.lcd_display_string("Ready...", 3)
 #lcd.lcd_display_string("12345678901234567890", 4)
 
 all_relays = [11, 12, 13, 14, 15, 16, 17, 18]
@@ -35,7 +35,6 @@ def one(channel):
     if GPIO.input(relay1):
         lcd.lcd_clear()
         lcd.lcd_display_string("CMC BH-30 Controller", 1)
-        lcd.lcd_display_string("", 2)
         lcd.lcd_display_string("Relay 1 was OFF", 3)
         lcd.lcd_display_string("Switching ON", 4)
         GPIO.output(all_relays, GPIO.HIGH)
@@ -44,7 +43,6 @@ def one(channel):
     else:
         lcd.lcd_clear()
         lcd.lcd_display_string("CMC BH-30 Controller", 1)
-        lcd.lcd_display_string("", 2)
         lcd.lcd_display_string("Relay 1 was ON", 3)
         lcd.lcd_display_string("Switching OFF", 4)
         GPIO.output(all_relays, GPIO.HIGH)
@@ -53,7 +51,6 @@ def eight(channel):
     if GPIO.input(relay8):
         lcd.lcd_clear()
         lcd.lcd_display_string("CMC BH-30 Controller", 1)
-        lcd.lcd_display_string("", 2)
         lcd.lcd_display_string("Relay 8 was OFF", 3)
         lcd.lcd_display_string("Switching ON", 4)
         GPIO.output(all_relays, GPIO.HIGH)
@@ -62,7 +59,6 @@ def eight(channel):
     else:
         lcd.lcd_clear()
         lcd.lcd_display_string("CMC BH-30 Controller", 1)
-        lcd.lcd_display_string("", 2)
         lcd.lcd_display_string("Relay 8 was ON", 3)
         lcd.lcd_display_string("Switching OFF", 4)
         GPIO.output(all_relays, GPIO.HIGH)
@@ -74,9 +70,7 @@ def main():
 def destroy():
     lcd.lcd_clear()
     lcd.lcd_display_string("CMC BH-30 Controller", 1)
-    lcd.lcd_display_string("", 2)
-    lcd.lcd_display_string("", 3)
-    lcd.lcd_display_string("Goodbye.", 4)
+    lcd.lcd_display_string("Goodbye.", 3)
     GPIO.output(all_relays, GPIO.HIGH)
     sleep(2)
     GPIO.cleanup()
