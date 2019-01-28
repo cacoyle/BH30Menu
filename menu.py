@@ -30,55 +30,6 @@ state6=GPIO.input(relay6)
 state7=GPIO.input(relay7)
 state8=GPIO.input(relay8)
 
-def main():
-    print("1. Select relay 1")
-    print("2. Select relay 2")
-    print("3. Select relay 3")
-    print("4. Select relay 4")
-    print("5. Select relay 5")
-    print("6. Select relay 6")
-    print("7. Select relay 7")
-    print("8. Select relay 8")
-    print("9. Query relays")
-    print("0. Quit")
-    while True:
-        try:
-            selection=int(input("Select an option: "))
-            if selection==1:
-                relayOne()
-                break
-            elif selection==2:
-                relayTwo()
-                break
-            elif selection==3:
-                relayThree()
-                break
-            elif selection==4:
-                relayFour()
-                break
-            elif selection==5:
-                relayFive()
-                break
-            elif selection==6:
-                relaySix()
-                break
-            elif selection==7:
-                relaySeven()
-                break
-            elif selection==8:
-                relayEight()
-                break
-            elif selection==9:
-                queryPins()
-                break
-            elif selection==0:
-                destroy()
-            else:
-                print("\nInvalid choice. Enter 1-3.\n")
-                main()
-        except ValueError as e:
-                print(e)
-                print("\nInvalid choice. Enter 1-3.\n")
 
 def relayOne():
     if GPIO.input(relay1):
@@ -88,7 +39,7 @@ def relayOne():
         print ("\nRelay 1 is Selected.\n")
     else:
         print("\nRelay 1 is already selected!\n")
-    main()
+
 
 def relayTwo():
     if GPIO.input(relay2):
@@ -98,7 +49,7 @@ def relayTwo():
         print ("\nRelay 2 Selected.\n")
     else:
         print("\nRelay 2 is already selected!\n")
-    main()
+
 
 def relayThree():
     if GPIO.input(relay3):
@@ -108,7 +59,7 @@ def relayThree():
         print ("\nRelay 3 Selected.\n")
     else:
         print("\nRelay 3 is already selected!\n")
-    main()
+
 
 def relayFour():
     if GPIO.input(relay4):
@@ -118,7 +69,7 @@ def relayFour():
         print ("\nRelay 4 Selected.\n")
     else:
         print("\nRelay 4 is already selected!\n")
-    main()
+
 
 def relayFive():
     if GPIO.input(relay5):
@@ -128,7 +79,7 @@ def relayFive():
         print ("\nRelay 5 Selected.\n")
     else:
         print("\nRelay 5 is already selected!\n")
-    main()
+
 
 def relaySix():
     if GPIO.input(relay6):
@@ -138,7 +89,7 @@ def relaySix():
         print ("\nRelay 6 Selected.\n")
     else:
         print("\nRelay 6 is already selected!\n")
-    main()
+
 
 def relaySeven():
     if GPIO.input(relay7):
@@ -148,7 +99,7 @@ def relaySeven():
         print ("\nRelay 7 Selected.\n")
     else:
         print("\nRelay 7 is already selected!\n")
-    main()
+
 
 def relayEight():
     if GPIO.input(relay8):
@@ -158,51 +109,14 @@ def relayEight():
         print ("\nRelay 8 Selected.\n")
     else:
         print("\nRelay 8 is already selected!\n")
-    main()
+
 
 def queryPins():
 
-    if GPIO.input(relay1):
-        print("\nRelay 1 is not active.\n")
-    else:
-        print("\nRelay 1 is active.\n")
-
-    if GPIO.input(relay2):
-        print("\nRelay 2 is not active.\n")
-    else:
-        print("\nRelay 2 is active.\n")
-
-    if GPIO.input(relay3):
-        print("\nRelay 3 is not active.\n")
-    else:
-        print("\nRelay 3 is active.\n")
-
-    if GPIO.input(relay4):
-        print("\nRelay 4 is not active.\n")
-    else:
-        print("\nRelay 4 is active.\n")
-
-    if GPIO.input(relay5):
-        print("\nRelay 5 is not active.\n")
-    else:
-        print("\nRelay 5 is active.\n")
-
-    if GPIO.input(relay6):
-        print("\nRelay 6 is not active.\n")
-    else:
-        print("\nRelay 6 is active.\n")
-
-    if GPIO.input(relay7):
-        print("\nRelay 7 is not active.\n")
-    else:
-        print("\nRelay 7 is active.\n")
-
-    if GPIO.input(relay8):
-        print("\nRelay 8 is not active.\n")
-    else:
-        print("\nRelay 8 is active.\n")
-
-    main()
+    for x in allRelays:
+        if x:
+            return True
+    return False
 
 def destroy():
     lcd.lcd_clear()
@@ -217,8 +131,54 @@ def destroy():
     exit()
 
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        destroy()
+
+    while True:
+        print("1. Select relay 1")
+        print("2. Select relay 2")
+        print("3. Select relay 3")
+        print("4. Select relay 4")
+        print("5. Select relay 5")
+        print("6. Select relay 6")
+        print("7. Select relay 7")
+        print("8. Select relay 8")
+        print("9. Query relays")
+        print("0. Quit")
+        try:
+            selection=int(input("Select an option: "))
+            if selection==1:
+                relayOne()
+                continue
+            elif selection==2:
+                relayTwo()
+                continue
+            elif selection==3:
+                relayThree()
+                continue
+            elif selection==4:
+                relayFour()
+                continue
+            elif selection==5:
+                relayFive()
+                continue
+            elif selection==6:
+                relaySix()
+                continue
+            elif selection==7:
+                relaySeven()
+                continue
+            elif selection==8:
+                relayEight()
+                continue
+            elif selection==9:
+                queryPins()
+                continue
+            elif selection==0:
+                destroy()
+            else:
+                print("\nInvalid choice. Enter 1-9.\n")
+        except ValueError as e:
+            print(e)
+            print("\nInvalid choice. Enter 1-9.\n")
+        except KeyboardInterrupt:
+            destroy()
 
