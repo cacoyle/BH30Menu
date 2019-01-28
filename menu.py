@@ -3,14 +3,10 @@ import RPi.GPIO as GPIO
 from time import sleep
 from rpi_displays.sainsmart.displays import LCD2004
 
-lcd = LCD2004()
-lcd.clear()
-lcd.display_string("CMC BH-30 Controller", 1)
-lcd.display_string("Ready...", 3)
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+lcd=LCD2004()
 
 allRelays=[11,12,13,14,15,16,17,18]
+
 relay1=11
 relay2=12
 relay3=13
@@ -19,7 +15,28 @@ relay5=15
 relay6=16
 relay7=17
 relay8=18
+button1=21
+button2=20
+button3=26
+button4=19
+button5=6
+button6=5
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
 GPIO.setup(allRelays, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(button1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button4, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button5, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button6, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+def __init__():
+    lcd.clear()
+    lcd.display_string("CMC BH-30 Controller", 1)
+    lcd.display_string("Ready...", 3)
 
 def relayOne():
     if GPIO.input(relay1):
@@ -149,6 +166,7 @@ def destroy():
     exit()
 
 if __name__ == '__main__':
+    __init__()
     while True:
         print("1. Select relay 1")
         print("2. Select relay 2")
