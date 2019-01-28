@@ -123,11 +123,17 @@ def relayEight():
 
 def queryPins():
 
-    for any in list(relayPins.values()):
-        if any == False:
-            print("dickbutt")
+    for k,v in relayPins:
+        if gpio.input(relayPins[k]) == False:
+            print("False")
         else:
             return
+
+#    for any in list(relayPins.values()):
+#        if any == False:
+#            print("dickbutt")
+#        else:
+#            return
 
 #    if GPIO.input(relay1):
 #        print("\nRelay 1 is not active.\n")
@@ -229,7 +235,7 @@ if __name__ == '__main__':
             else:
                 print("\nInvalid choice. Enter 1-9.\n")
         except ValueError as e:
-#            print(e)
+            print(e)
             print("\nInvalid choice. Enter 1-9.\n")
         except KeyboardInterrupt:
             destroy()
