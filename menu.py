@@ -5,8 +5,6 @@ from rpi_displays.sainsmart.displays import LCD2004
 
 lcd=LCD2004()
 
-allRelays=[11,12,13,14,15,16,17,18]
-
 relay1=11
 relay2=12
 relay3=13
@@ -22,10 +20,13 @@ button4=19
 button5=6
 button6=5
 
+relayPins={"relay1": 11, "relay2": 12, "relay3": 13, "relay4": 14, "relay5": 15, "relay6": 16, "relay7": 17, "relay8": 18}
+allRelays = relayPins.values()
+
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(allRelays, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(list(relayPins.values()), GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(button1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -38,126 +39,142 @@ def __init__():
     lcd.clear()
     lcd.display_string("CMC BH-30 Controller", 1)
     lcd.display_string("Ready...", 3)
+    GPIO.add_event_detect(button1, GPIO.FALLING, callback=relayOne, bouncetime=1500)
+    GPIO.add_event_detect(button2, GPIO.FALLING, callback=relayTwo, bouncetime=1500)
+    GPIO.add_event_detect(button3, GPIO.FALLING, callback=relayThree, bouncetime=1500)
+    GPIO.add_event_detect(button4, GPIO.FALLING, callback=relayFour, bouncetime=1500)
+    GPIO.add_event_detect(button5, GPIO.FALLING, callback=relayFive, bouncetime=1500)
+    GPIO.add_event_detect(button6, GPIO.FALLING, callback=relaySix, bouncetime=1500)
 
 def relayOne():
-    if GPIO.input(relay1):
-        GPIO.output(allRelays, GPIO.HIGH)
+    if GPIO.input(relay1) == True:
+        GPIO.output(relayPins.values(), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay1, GPIO.LOW)
         print ("\nRelay 1 is Selected.\n")
-    else:
+    elif GPIO.input(relay1) == False:
         print("\nRelay 1 is already selected!\n")
+    return
 
 def relayTwo():
-    if GPIO.input(relay2):
-        GPIO.output(allRelays, GPIO.HIGH)
+    if GPIO.input(relay2) == True:
+        GPIO.output(list(relayPins.values()), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay2, GPIO.LOW)
         print ("\nRelay 2 Selected.\n")
-    else:
+    elif GPIO.input(relay2) == False:
         print("\nRelay 2 is already selected!\n")
+    return
 
 def relayThree():
-    if GPIO.input(relay3):
-        GPIO.output(allRelays, GPIO.HIGH)
+    if GPIO.input(relay3) == True:
+        GPIO.output(list(relayPins.values()), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay3, GPIO.LOW)
         print ("\nRelay 3 Selected.\n")
-    else:
+    elif GPIO.input(relay3) == False:
         print("\nRelay 3 is already selected!\n")
 
 def relayFour():
     if GPIO.input(relay4):
-        GPIO.output(allRelays, GPIO.HIGH)
+        GPIO.output(list(relayPins.values()), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay4, GPIO.LOW)
         print ("\nRelay 4 Selected.\n")
-    else:
+    elif GPIO.input(relay4) == False:
         print("\nRelay 4 is already selected!\n")
 
 def relayFive():
-    if GPIO.input(relay5):
-        GPIO.output(allRelays, GPIO.HIGH)
+    if GPIO.input(relay5) == True:
+        GPIO.output(list(relayPins.values()), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay5, GPIO.LOW)
         print ("\nRelay 5 Selected.\n")
-    else:
+    elif GPIO.input(relay5) == False:
         print("\nRelay 5 is already selected!\n")
 
 def relaySix():
-    if GPIO.input(relay6):
-        GPIO.output(allRelays, GPIO.HIGH)
+    if GPIO.input(relay6) == True:
+        GPIO.output(list(relayPins.values()), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay6, GPIO.LOW)
         print ("\nRelay 6 Selected.\n")
-    else:
+    elif GPIO.input(relay6) == False:
         print("\nRelay 6 is already selected!\n")
     return
 
 def relaySeven():
-    if GPIO.input(relay7):
-        GPIO.output(allRelays, GPIO.HIGH)
+    if GPIO.input(relay7) == True:
+        GPIO.output(list(relayPins.values()), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay7, GPIO.LOW)
         print ("\nRelay 7 Selected.\n")
-    else:
+    elif GPIO.input(relay7) == False:
         print("\nRelay 7 is already selected!\n")
 
 def relayEight():
-    if GPIO.input(relay8):
-        GPIO.output(allRelays, GPIO.HIGH)
+    if GPIO.input(relay8) == True:
+        GPIO.output(list(relayPins.values()), GPIO.HIGH)
         sleep(1)
         GPIO.output(relay8, GPIO.LOW)
         print ("\nRelay 8 Selected.\n")
-    else:
+    elif GPIO.input(relay8) == False:
         print("\nRelay 8 is already selected!\n")
+
 def queryPins():
-    if GPIO.input(relay1):
-        print("\nRelay 1 is not active.\n")
-    else:
-        print("\nRelay 1 is active.\n")
 
-    if GPIO.input(relay2):
-        print("\nRelay 2 is not active.\n")
-    else:
-        print("\nRelay 2 is active.\n")
+    for any in list(relayPins.values()):
+        if any == False:
+            print("dickbutt")
+        else:
+            return
 
-    if GPIO.input(relay3):
-        print("\nRelay 3 is not active.\n")
-    else:
-        print("\nRelay 3 is active.\n")
-
-    if GPIO.input(relay4):
-        print("\nRelay 4 is not active.\n")
-    else:
-        print("\nRelay 4 is active.\n")
-
-    if GPIO.input(relay5):
-        print("\nRelay 5 is not active.\n")
-    else:
-        print("\nRelay 5 is active.\n")
-
-    if GPIO.input(relay6):
-        print("\nRelay 6 is not active.\n")
-    else:
-        print("\nRelay 6 is active.\n")
-
-    if GPIO.input(relay7):
-        print("\nRelay 7 is not active.\n")
-    else:
-        print("\nRelay 7 is active.\n")
-
-    if GPIO.input(relay8):
-        print("\nRelay 8 is not active.\n")
-    else:
-        print("\nRelay 8 is active.\n")
+#    if GPIO.input(relay1):
+#        print("\nRelay 1 is not active.\n")
+#    else:
+#        print("\nRelay 1 is active.\n")
+#
+#    if GPIO.input(relay2):
+#        print("\nRelay 2 is not active.\n")
+#    else:
+#        print("\nRelay 2 is active.\n")
+#
+#    if GPIO.input(relay3):
+#        print("\nRelay 3 is not active.\n")
+#    else:
+#        print("\nRelay 3 is active.\n")
+#
+#    if GPIO.input(relay4):
+#        print("\nRelay 4 is not active.\n")
+#    else:
+#        print("\nRelay 4 is active.\n")
+#
+#    if GPIO.input(relay5):
+#        print("\nRelay 5 is not active.\n")
+#    else:
+#        print("\nRelay 5 is active.\n")
+#
+#    if GPIO.input(relay6):
+#        print("\nRelay 6 is not active.\n")
+#    else:
+#        print("\nRelay 6 is active.\n")
+#
+#    if GPIO.input(relay7):
+#        print("\nRelay 7 is not active.\n")
+#    else:
+#        print("\nRelay 7 is active.\n")
+#
+#    if GPIO.input(relay8):
+#        print("\nRelay 8 is not active.\n")
+#    else:
+#        print("\nRelay 8 is active.\n")
 
 def destroy():
     lcd.clear()
     lcd.display_string("CMC BH-30 Controller", 1)
     lcd.display_string("Goodbye.", 3)
     print ("\nCleaning up...\n")
-    GPIO.output(allRelays, GPIO.HIGH)
+    GPIO.output(list(relayPins.values()), GPIO.HIGH)
     GPIO.cleanup()
     sleep(.5)
     print ("\nGoodbye.\n")
@@ -212,7 +229,7 @@ if __name__ == '__main__':
             else:
                 print("\nInvalid choice. Enter 1-9.\n")
         except ValueError as e:
-            print(e)
+#            print(e)
             print("\nInvalid choice. Enter 1-9.\n")
         except KeyboardInterrupt:
             destroy()
