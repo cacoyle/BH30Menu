@@ -3,25 +3,25 @@ import RPi.GPIO as GPIO
 from time import sleep
 from rpi_displays.sainsmart.displays import LCD2004
 
-lcd = LCD2004()
+lcd=LCD2004()
 
-all_relays = [11, 12, 13, 14, 15, 16, 17, 18]
-num_relays = len(all_relays)
+all_relays=[11, 12, 13, 14, 15, 16, 17, 18]
+num_relays=len(all_relays)
 
-relay1 = 11
-relay2 = 12
-relay3 = 13
-relay4 = 14
-relay5 = 15
-relay6 = 16
-relay7 = 17
-relay8 = 18
-button1 = 21
-button2 = 20
-button3 = 26
-button4 = 19
-button5 = 6
-button6 = 5
+relay1=11
+relay2=12
+relay3=13
+relay4=14
+relay5=15
+relay6=16
+relay7=17
+relay8=18
+button1=21
+button2=20
+button3=26
+button4=19
+button5=6
+button6=5
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(button1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
