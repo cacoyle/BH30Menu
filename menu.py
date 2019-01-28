@@ -21,12 +21,12 @@ button5=6
 button6=5
 
 relayPins={"relay1": 11, "relay2": 12, "relay3": 13, "relay4": 14, "relay5": 15, "relay6": 16, "relay7": 17, "relay8": 18}
-allRelays = relayPins.values()
+allRelays = list(relayPins.values())
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(list(relayPins.values()), GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(allRelays, GPIO.OUT, initial=GPIO.HIGH)
 GPIO.setup(button1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -48,7 +48,7 @@ def __init__():
 
 def relayOne():
     if GPIO.input(relay1) == True:
-        GPIO.output(relayPins.values(), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay1, GPIO.LOW)
         print ("\nRelay 1 is Selected.\n")
@@ -58,7 +58,7 @@ def relayOne():
 
 def relayTwo():
     if GPIO.input(relay2) == True:
-        GPIO.output(list(relayPins.values()), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay2, GPIO.LOW)
         print ("\nRelay 2 Selected.\n")
@@ -68,7 +68,7 @@ def relayTwo():
 
 def relayThree():
     if GPIO.input(relay3) == True:
-        GPIO.output(list(relayPins.values()), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay3, GPIO.LOW)
         print ("\nRelay 3 Selected.\n")
@@ -77,7 +77,7 @@ def relayThree():
 
 def relayFour():
     if GPIO.input(relay4):
-        GPIO.output(list(relayPins.values()), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay4, GPIO.LOW)
         print ("\nRelay 4 Selected.\n")
@@ -86,7 +86,7 @@ def relayFour():
 
 def relayFive():
     if GPIO.input(relay5) == True:
-        GPIO.output(list(relayPins.values()), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay5, GPIO.LOW)
         print ("\nRelay 5 Selected.\n")
@@ -95,7 +95,7 @@ def relayFive():
 
 def relaySix():
     if GPIO.input(relay6) == True:
-        GPIO.output(list(relayPins.values()), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay6, GPIO.LOW)
         print ("\nRelay 6 Selected.\n")
@@ -105,7 +105,7 @@ def relaySix():
 
 def relaySeven():
     if GPIO.input(relay7) == True:
-        GPIO.output(list(relayPins.values()), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay7, GPIO.LOW)
         print ("\nRelay 7 Selected.\n")
@@ -114,7 +114,7 @@ def relaySeven():
 
 def relayEight():
     if GPIO.input(relay8) == True:
-        GPIO.output(list(relayPins.values()), GPIO.HIGH)
+        GPIO.output(allRelays, GPIO.HIGH)
         sleep(1)
         GPIO.output(relay8, GPIO.LOW)
         print ("\nRelay 8 Selected.\n")
@@ -129,7 +129,7 @@ def queryPins():
         else:
             return
 
-#    for any in list(relayPins.values()):
+#    for any in allRelays:
 #        if any == False:
 #            print("dickbutt")
 #        else:
@@ -180,7 +180,7 @@ def destroy():
     lcd.display_string("CMC BH-30 Controller", 1)
     lcd.display_string("Goodbye.", 3)
     print ("\nCleaning up...\n")
-    GPIO.output(list(relayPins.values()), GPIO.HIGH)
+    GPIO.output(allRelays, GPIO.HIGH)
     GPIO.cleanup()
     sleep(.5)
     print ("\nGoodbye.\n")
