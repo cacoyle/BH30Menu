@@ -33,6 +33,7 @@ GPIO.setup(button4, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button5, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button6, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
+
 def __init__():
     lcd.clear()
     lcd.display_string("CMC BH-30 Controller", 1)
@@ -91,6 +92,7 @@ def relaySix():
         print ("\nRelay 6 Selected.\n")
     else:
         print("\nRelay 6 is already selected!\n")
+    return
 
 def relaySeven():
     if GPIO.input(relay7):
@@ -109,9 +111,7 @@ def relayEight():
         print ("\nRelay 8 Selected.\n")
     else:
         print("\nRelay 8 is already selected!\n")
-
 def queryPins():
-
     if GPIO.input(relay1):
         print("\nRelay 1 is not active.\n")
     else:
