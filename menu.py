@@ -4,7 +4,6 @@ from time import sleep
 from rpi_displays.sainsmart.displays import LCD2004
 
 lcd = LCD2004()
-
 lcd.clear()
 lcd.display_string("CMC BH-30 Controller", 1)
 lcd.display_string("Ready...", 3)
@@ -20,7 +19,6 @@ relay5=15
 relay6=16
 relay7=17
 relay8=18
-
 GPIO.setup(allRelays, GPIO.OUT, initial=GPIO.HIGH)
 
 def relayOne():
@@ -95,47 +93,47 @@ def relayEight():
     else:
         print("\nRelay 8 is already selected!\n")
 
-#def queryPins():
+def queryPins():
 
-#    if GPIO.input(relay1):
-#        print("\nRelay 1 is not active.\n")
-#    else:
-#        print("\nRelay 1 is active.\n")
-#
-#    if GPIO.input(relay2):
-#        print("\nRelay 2 is not active.\n")
-#    else:
-#        print("\nRelay 2 is active.\n")
-#
-#    if GPIO.input(relay3):
-#        print("\nRelay 3 is not active.\n")
-#    else:
-#        print("\nRelay 3 is active.\n")
-#
-#    if GPIO.input(relay4):
-#        print("\nRelay 4 is not active.\n")
-#    else:
-#        print("\nRelay 4 is active.\n")
-#
-#    if GPIO.input(relay5):
-#        print("\nRelay 5 is not active.\n")
-#    else:
-#        print("\nRelay 5 is active.\n")
-#
-#    if GPIO.input(relay6):
-#        print("\nRelay 6 is not active.\n")
-#    else:
-#        print("\nRelay 6 is active.\n")
-#
-#    if GPIO.input(relay7):
-#        print("\nRelay 7 is not active.\n")
-#    else:
-#        print("\nRelay 7 is active.\n")
-#
-#    if GPIO.input(relay8):
-#        print("\nRelay 8 is not active.\n")
-#    else:
-#        print("\nRelay 8 is active.\n")
+    if GPIO.input(relay1):
+        print("\nRelay 1 is not active.\n")
+    else:
+        print("\nRelay 1 is active.\n")
+
+    if GPIO.input(relay2):
+        print("\nRelay 2 is not active.\n")
+    else:
+        print("\nRelay 2 is active.\n")
+
+    if GPIO.input(relay3):
+        print("\nRelay 3 is not active.\n")
+    else:
+        print("\nRelay 3 is active.\n")
+
+    if GPIO.input(relay4):
+        print("\nRelay 4 is not active.\n")
+    else:
+        print("\nRelay 4 is active.\n")
+
+    if GPIO.input(relay5):
+        print("\nRelay 5 is not active.\n")
+    else:
+        print("\nRelay 5 is active.\n")
+
+    if GPIO.input(relay6):
+        print("\nRelay 6 is not active.\n")
+    else:
+        print("\nRelay 6 is active.\n")
+
+    if GPIO.input(relay7):
+        print("\nRelay 7 is not active.\n")
+    else:
+        print("\nRelay 7 is active.\n")
+
+    if GPIO.input(relay8):
+        print("\nRelay 8 is not active.\n")
+    else:
+        print("\nRelay 8 is active.\n")
 
 def destroy():
     lcd.clear()
