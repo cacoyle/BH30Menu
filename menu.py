@@ -5,22 +5,23 @@ from rpi_displays.sainsmart.displays import LCD2004
 
 lcd=LCD2004()
 
-relay1=11
-relay2=12
-relay3=13
-relay4=14
-relay5=15
-relay6=16
-relay7=17
-relay8=18
+Relay1=11
+Relay2=12
+Relay3=13
+Relay4=14
+Relay5=15
+Relay6=16
+Relay7=17
+Relay8=18
 button1=21
 button2=20
 button3=26
 button4=19
 button5=6
 button6=5
+button7=25
 
-relayPins={"relay1": 11, "relay2": 12, "relay3": 13, "relay4": 14, "relay5": 15, "relay6": 16, "relay7": 17, "relay8": 18}
+relayPins={"Relay1": 11, "Relay2": 12, "Relay3": 13, "Relay4": 14, "Relay5": 15, "Relay6": 16, "Relay7": 17, "Relay8": 18}
 allRelays = list(relayPins.values())
 
 GPIO.setwarnings(False)
@@ -33,34 +34,38 @@ GPIO.setup(button3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button4, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button5, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button6, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(button7, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def __init__():
     lcd.clear()
     lcd.display_string("CMC BH-30 Controller", 1)
     lcd.display_string("Ready...      VA3DXV", 4)
-    GPIO.add_event_detect(button1, GPIO.FALLING, callback=relayOne, bouncetime=1500)
-    GPIO.add_event_detect(button2, GPIO.FALLING, callback=relayTwo, bouncetime=1500)
-    GPIO.add_event_detect(button3, GPIO.FALLING, callback=relayThree, bouncetime=1500)
-    GPIO.add_event_detect(button4, GPIO.FALLING, callback=relayFour, bouncetime=1500)
-    GPIO.add_event_detect(button5, GPIO.FALLING, callback=relayFive, bouncetime=1500)
-    GPIO.add_event_detect(button6, GPIO.FALLING, callback=relaySix, bouncetime=1500)
+    GPIO.add_event_detect(button1, GPIO.FALLING, callback=relayOne, bouncetime=5000)
+    GPIO.add_event_detect(button2, GPIO.FALLING, callback=relayTwo, bouncetime=5000)
+    GPIO.add_event_detect(button3, GPIO.FALLING, callback=relayThree, bouncetime=5000)
+    GPIO.add_event_detect(button4, GPIO.FALLING, callback=relayFour, bouncetime=5000)
+    GPIO.add_event_detect(button5, GPIO.FALLING, callback=relayFive, bouncetime=5000)
+    GPIO.add_event_detect(button6, GPIO.FALLING, callback=relaySix, bouncetime=5000)
+    GPIO.add_event_detect(button7, GPIO.FALLING, callback=relaySeven, bouncetime=5000)
 
 def relayOne(self=None):
-    if GPIO.input(relay1) == True:
+    sleep(.5)
+    if GPIO.input(Relay1) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay1, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay1, GPIO.LOW)
         print ("\nRelay 1 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay1 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay1) == False:
+    elif GPIO.input(Relay1) == False:
         print("\nRelay 1 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay1!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay1!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay1 selected.", 2)
@@ -68,21 +73,23 @@ def relayOne(self=None):
     return
 
 def relayTwo(self=None):
-    if GPIO.input(relay2) == True:
+    sleep(.5)
+    if GPIO.input(Relay2) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay2, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay2, GPIO.LOW)
         print ("\nRelay 2 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay2 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay2) == False:
+    elif GPIO.input(Relay2) == False:
         print("\nRelay 2 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay2!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay2!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay2 selected.", 2)
@@ -90,21 +97,23 @@ def relayTwo(self=None):
     return
 
 def relayThree(self=None):
-    if GPIO.input(relay3) == True:
+    sleep(.5)
+    if GPIO.input(Relay3) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay3, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay3, GPIO.LOW)
         print ("\nRelay 3 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay3 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay3) == False:
+    elif GPIO.input(Relay3) == False:
         print("\nRelay 3 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay3!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay3!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay3 selected.", 2)
@@ -112,21 +121,23 @@ def relayThree(self=None):
     return
 
 def relayFour(self=None):
-    if GPIO.input(relay4):
+    sleep(.5)
+    if GPIO.input(Relay4):
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay4, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay4, GPIO.LOW)
         print ("\nRelay 4 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay4 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay4) == False:
+    elif GPIO.input(Relay4) == False:
         print("\nRelay 4 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay4!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay4!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay4 selected.", 2)
@@ -134,21 +145,23 @@ def relayFour(self=None):
     return
 
 def relayFive(self=None):
-    if GPIO.input(relay5) == True:
+    sleep(.5)
+    if GPIO.input(Relay5) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay5, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay5, GPIO.LOW)
         print ("\nRelay 5 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay5 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay5) == False:
+    elif GPIO.input(Relay5) == False:
         print("\nRelay 5 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay5!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay5!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay5 selected.", 2)
@@ -156,21 +169,23 @@ def relayFive(self=None):
     return
 
 def relaySix(self=None):
-    if GPIO.input(relay6) == True:
+    sleep(.5)
+    if GPIO.input(Relay6) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay6, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay6, GPIO.LOW)
         print ("\nRelay 6 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay6 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay6) == False:
+    elif GPIO.input(Relay6) == False:
         print("\nRelay 6 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay6!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay6!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay6 selected.", 2)
@@ -178,21 +193,23 @@ def relaySix(self=None):
     return
 
 def relaySeven(self=None):
-    if GPIO.input(relay7) == True:
+    sleep(.5)
+    if GPIO.input(Relay7) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay7, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay7, GPIO.LOW)
         print ("\nRelay 7 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay7 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay7) == False:
+    elif GPIO.input(Relay7) == False:
         print("\nRelay 7 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay7!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay7!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay7 selected.", 2)
@@ -200,21 +217,23 @@ def relaySeven(self=None):
     return
 
 def relayEight(self=None):
-    if GPIO.input(relay8) == True:
+    sleep(.5)
+    if GPIO.input(Relay8) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(1)
-        GPIO.output(relay8, GPIO.LOW)
+        sleep(.5)
+        GPIO.output(Relay8, GPIO.LOW)
         print ("\nRelay 8 Selected.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay8 selected.", 2)
+        sleep(5)
         lcd.display_string("Ready...      VA3DXV", 4)
-    elif GPIO.input(relay8) == False:
+    elif GPIO.input(Relay8) == False:
         print("\nRelay 8 is already selected!\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on relay8!", 3)
-        sleep(2)
+        lcd.display_string("Already on Relay8!", 3)
+        sleep(1)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Relay8 selected.", 2)
@@ -293,10 +312,8 @@ if __name__ == '__main__':
                 print("\nInvalid choice. Enter 1-9.\n")
 
         except ValueError as e:
-            print(e)
             print("\nInvalid choice. Enter 1-9.\n")
         except TypeError as e:
-            print(e)
             print("\nInvalid choice. Enter 1-9.\n")
         except KeyboardInterrupt:
             destroy()
