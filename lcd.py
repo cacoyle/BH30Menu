@@ -2,7 +2,6 @@
 import RPi.GPIO as GPIO
 from rpi_displays.sainsmart.displays import LCD2004
 from time import sleep
-
 lcd = LCD2004()
 
 GPIO.setwarnings(False)
@@ -22,13 +21,14 @@ button1 = 21
 button8 = 26
 GPIO.setup(button1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button8, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-lcd.clear()
 
-
-def setup():
+def __init__():
+    lcd.clear()
     lcd.display_string("CMC BH-30 Controller", 1)
     lcd.display_string("           by VA3DXV", 2)
     lcd.display_string("Ready...", 4)
+    GPIO.add_event_detect(button1, GPIO.FALLING, callback=menu(0), bouncetime=300)
+    GPIO.add_event_detect(button8, GPIO.FALLING, callback=main(0), bouncetime=300)
 
 def destroy():
     lcd.clear()
@@ -44,27 +44,12 @@ def menu():
     lcd.display_string("CMC BH-30 Controller", 1)
     lcd.display_string("Menu", 2)
 
-def main():
-    GPIO.add_event_detect(button1, GPIO.FALLING, callback=menu(0), bouncetime=300)
-    GPIO.add_event_detect(button8, GPIO.FALLING, callback=main(0), bouncetime=300)
-
-if __name__ == "__main__":
-    setup()
+if __name__ == '__menu__':
     try:
-        main()
+        __init__()
+
         while(True):
-            sleep(.2)
+            sleep(0.5)
+
     except KeyboardInterrupt:
         destroy()
-
-#if __name__ == '__menu__':
-#    setup()
-#
-#    try:
-#        menu()
-#
-#        while(True):
-#            sleep(0.5)
-#
-#    except KeyboardInterrupt:
-#        destroy()
