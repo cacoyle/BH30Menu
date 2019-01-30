@@ -1,4 +1,26 @@
 #!/usr/bin/python3
+# BH30Menu.py
+# 29/01/2019
+#
+# Copyright 2018 - Brian Graves - VA3DXV
+#
+# va3dxv@gmail.com
+#
+# https://github.com/va3dxv
+#
+#   This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+### 
 import RPi.GPIO as GPIO
 import time
 import datetime
@@ -440,14 +462,14 @@ def destroy():
 if __name__ == '__main__':
     __init__()
     while True:
-        print("1. Select relay 1")
-        print("2. Select relay 2")
-        print("3. Select relay 3")
-        print("4. Select relay 4")
-        print("5. Select relay 5")
-        print("6. Select relay 6")
-        print("7. Select relay 7")
-        print("8. Select relay 8")
+        print("1. Select 80 Meters Low")
+        print("2. Select 80 Meters High")
+        print("3. Select 40 Meters Low")
+        print("4. Select 40 Meters High")
+        print("5. Select 20 Meters Low")
+        print("6. Select 20 Meters High")
+        print("7. Select 15 Meters")
+        print("8. Select 10 Meters")
         print("9. Query relays")
         print("0. Quit")
         try:
