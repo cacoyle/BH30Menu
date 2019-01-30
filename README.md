@@ -7,7 +7,7 @@ The selected relay shorts one of 16 pins to a common pin in order to select the 
 
 Selecting a band by pressing a button or by using the CLI menu will tell the BH-30 to switch bands.
 
-If the band selected is already the active band, the program will retrieve the latest DX spots for that band.
+If the band selected is already the active band, the program will retrieve and display the latest DX spots for that band.
 
 More info to come.
 
