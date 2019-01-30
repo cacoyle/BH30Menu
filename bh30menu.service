@@ -1,0 +1,12 @@
+[Unit]
+Description=BH30Menu Service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /usr/local/sbin/BH30Menu.py
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target
