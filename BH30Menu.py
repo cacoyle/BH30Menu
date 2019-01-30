@@ -26,11 +26,16 @@ import time
 import datetime
 import pytz
 import requests
+import argparse
 import xmltodict
 from time import sleep
 from rpi_displays.sainsmart.displays import LCD2004
 
 lcd=LCD2004()
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-cli", help="Enable CLI menu.", action="store_true", default=False)
+args = parser.parse_args()
 
 Relay1=11
 Relay2=12
@@ -53,27 +58,26 @@ allRelays = list(relayPins.values())
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
-
 GPIO.setup(allRelays, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(Button1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(Button2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(Button3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(Button4, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(Button5, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(Button6, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(Button7, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(Button1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Button2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Button3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Button4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Button5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Button6, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Button7, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def __init__():
     lcd.clear()
     lcd.display_string("CMC BH-30 Controller", 1)
     lcd.display_string("Ready...      VA3DXV", 4)
-    GPIO.add_event_detect(Button1, GPIO.FALLING, callback=relayOne, bouncetime=5000)
-    GPIO.add_event_detect(Button2, GPIO.FALLING, callback=relayTwo, bouncetime=5000)
-    GPIO.add_event_detect(Button3, GPIO.FALLING, callback=relayThree, bouncetime=5000)
-    GPIO.add_event_detect(Button4, GPIO.FALLING, callback=relayFour, bouncetime=5000)
-    GPIO.add_event_detect(Button5, GPIO.FALLING, callback=relayFive, bouncetime=5000)
-    GPIO.add_event_detect(Button6, GPIO.FALLING, callback=relaySix, bouncetime=5000)
-    GPIO.add_event_detect(Button7, GPIO.FALLING, callback=relaySeven, bouncetime=5000)
+    GPIO.add_event_detect(Button1, GPIO.FALLING, callback=relayOne, bouncetime=500)
+    GPIO.add_event_detect(Button2, GPIO.FALLING, callback=relayTwo, bouncetime=500)
+    GPIO.add_event_detect(Button3, GPIO.FALLING, callback=relayThree, bouncetime=500)
+    GPIO.add_event_detect(Button4, GPIO.FALLING, callback=relayFour, bouncetime=500)
+    GPIO.add_event_detect(Button5, GPIO.FALLING, callback=relayFive, bouncetime=500)
+    GPIO.add_event_detect(Button6, GPIO.FALLING, callback=relaySix, bouncetime=500)
+    GPIO.add_event_detect(Button7, GPIO.FALLING, callback=relaySeven, bouncetime=500)
 
 def relayOne(self=None):
     sleep(.5)
@@ -462,53 +466,63 @@ def destroy():
 if __name__ == '__main__':
     __init__()
     while True:
-        print("1. Select 80 Meters Low")
-        print("2. Select 80 Meters High")
-        print("3. Select 40 Meters Low")
-        print("4. Select 40 Meters High")
-        print("5. Select 20 Meters Low")
-        print("6. Select 20 Meters High")
-        print("7. Select 15 Meters")
-        print("8. Select 10 Meters")
-        print("9. Query relays")
-        print("0. Quit")
-        try:
-            selection=int(input("Select an option: "))
-            if selection==1:
-                relayOne()
-                continue
-            elif selection==2:
-                relayTwo()
-                continue
-            elif selection==3:
-                relayThree()
-                continue
-            elif selection==4:
-                relayFour()
-                continue
-            elif selection==5:
-                relayFive()
-                continue
-            elif selection==6:
-                relaySix()
-                continue
-            elif selection==7:
-                relaySeven()
-                continue
-            elif selection==8:
-                relayEight()
-                continue
-            elif selection==9:
-                queryPins()
-                continue
-            elif selection==0:
-                destroy()
-            else:
+        if args.cli:
+            print("1. Select 80 Meters Low")
+            print("2. Select 80 Meters High")
+            print("3. Select 40 Meters Low")
+            print("4. Select 40 Meters High")
+            print("5. Select 20 Meters Low")
+            print("6. Select 20 Meters High")
+            print("7. Select 15 Meters")
+            print("8. Select 10 Meters")
+            print("9. Query relays")
+            print("0. Quit")
+            try:
+                selection=int(input("Select an option: "))
+                if selection==1:
+                    relayOne()
+                    continue
+                elif selection==2:
+                    relayTwo()
+                    continue
+                elif selection==3:
+                    relayThree()
+                    continue
+                elif selection==4:
+                    relayFour()
+                    continue
+                elif selection==5:
+                    relayFive()
+                    continue
+                elif selection==6:
+                    relaySix()
+                    continue
+                elif selection==7:
+                    relaySeven()
+                    continue
+                elif selection==8:
+                    relayEight()
+                    continue
+                elif selection==9:
+                    queryPins()
+                    continue
+                elif selection==0:
+                    destroy()
+                else:
+                    print("\nInvalid choice. Enter 1-9.\n")
+            except ValueError as e:
                 print("\nInvalid choice. Enter 1-9.\n")
+            except TypeError as e:
+                print("\nInvalid choice. Enter 1-9.\n")
+            except KeyboardInterrupt:
+                destroy()
 
-        except ValueError as e:
-            print("\nInvalid choice. Enter 1-9.\n")
-        except TypeError as e:
-            print("\nInvalid choice. Enter 1-9.\n")
-        except KeyboardInterrupt:
-            destroy()
+        else:
+            try:
+                sleep(0.1)
+            except ValueError as e:
+                print("\nInvalid choice. Enter 1-9.\n")
+            except TypeError as e:
+                print("\nInvalid choice. Enter 1-9.\n")
+            except KeyboardInterrupt:
+                destroy()
