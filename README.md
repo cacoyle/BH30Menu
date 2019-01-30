@@ -1,4 +1,4 @@
-# amp_test
+# CMC BH-30 Controller Menu
 This program is for use with a CMC BH-30 HF amplifier in an amateur radio application.
 
 It's meant to run on a Raspberry Pi with an LCD display, buttons, and relay board.
