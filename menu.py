@@ -2,7 +2,7 @@
 # BH30Menu.py
 # 29/01/2019
 #
-# Copyright 2018 - Brian Graves - VA3DXV
+# Copyright 2019 - Brian Graves - VA3DXV
 #
 # va3dxv@gmail.com
 #
@@ -20,7 +20,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-### 
+#############################################################################
 import RPi.GPIO as GPIO
 import time
 import datetime
