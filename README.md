@@ -13,7 +13,7 @@ Relay board: https://www.amazon.ca/gp/product/B01BY1693A
 
 Display: https://www.amazon.ca/gp/product/B071FGZX8G
 
-![prototype](https://photos.app.goo.gl/Z58Z2YGjEpCud4iS7)
+![prototype](https://github.com/va3dxv/BH30Menu/blob/master/prototype.jpg)
 
 Quick start:
 
