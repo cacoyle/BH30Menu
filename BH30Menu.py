@@ -28,6 +28,7 @@ import pytz
 import requests
 import argparse
 import xmltodict
+import socket
 from time import sleep
 from rpi_displays.sainsmart.displays import LCD2004
 
@@ -52,6 +53,7 @@ Button4=19
 Button5=6
 Button6=5
 Button7=25
+Button8=24
 
 relayPins={"Relay1": 11, "Relay2": 12, "Relay3": 13, "Relay4": 14, "Relay5": 15, "Relay6": 16, "Relay7": 17, "Relay8": 18}
 allRelays = list(relayPins.values())
@@ -66,6 +68,8 @@ GPIO.setup(Button4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(Button5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(Button6, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(Button7, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Button8, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
 
 def __init__():
     lcd.clear()
@@ -78,6 +82,7 @@ def __init__():
     GPIO.add_event_detect(Button5, GPIO.FALLING, callback=relayFive, bouncetime=500)
     GPIO.add_event_detect(Button6, GPIO.FALLING, callback=relaySix, bouncetime=500)
     GPIO.add_event_detect(Button7, GPIO.FALLING, callback=relaySeven, bouncetime=500)
+    GPIO.add_event_detect(Button8, GPIO.FALLING, callback=relayEight, bouncetime=500)
 
 def relayOne(self=None):
     sleep(.5)
@@ -355,7 +360,7 @@ def relaySeven(self=None):
         GPIO.output(allRelays, GPIO.HIGH)
         sleep(.5)
         GPIO.output(Relay7, GPIO.LOW)
-        print ("\n15M High Activated.\n")
+        print ("\n15M Activated.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Switching to 15M", 2)
@@ -400,7 +405,7 @@ def relayEight(self=None):
         GPIO.output(allRelays, GPIO.HIGH)
         sleep(.5)
         GPIO.output(Relay8, GPIO.LOW)
-        print ("\n10M High Activated.\n")
+        print ("\n10M Activated.\n")
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Switching to 10M", 2)
