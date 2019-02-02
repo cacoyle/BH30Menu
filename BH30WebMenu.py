@@ -21,58 +21,65 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(allRelays, GPIO.OUT, initial=GPIO.HIGH)
 
-@route('/')
-
+@route("/")
 def index():
-    return template('home.tpl')
+    return template("index.tpl")
 
-@route('/80L')
-def index():
+@route("/80L")
+@route("/80L/<name>")
+def RelayOne(name="80L"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay1, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
-@route('/80H')
-def index():
+@route("/80H")
+@route("/80H/<name>")
+def RelayTwo(name="80H"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay2, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
-@route('/40L')
-def index():
+@route("/40L")
+@route("/40L/<name>")
+def RelayThree(name="40L"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay3, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
-@route('/40H')
-def index():
+@route("/40H")
+@route("/40H/<name>")
+def RelayFour(name="40H"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay4, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
-@route('/20L')
-def index():
+@route("/20L")
+@route("/20L/<name>")
+def RelayFive(name="20L"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay5, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
-@route('/20H')
-def index():
+@route("/20H")
+@route("/20H/<name>")
+def RelaySix(name="20H"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay6, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
-@route('/15')
-def index():
+@route("/15")
+@route("/15/<name>")
+def RelaySeven(name="15"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay7, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
-@route('/10')
-def index():
+@route("/10")
+@route("/10/<name>")
+def RelayEight(name="10"):
     GPIO.output(allRelays, GPIO.HIGH)
     GPIO.output(Relay8, GPIO.LOW)
-    return template('home.tpl')
+    return template("band.tpl", name=name)
 
 def destroy():
     print ("\nCleaning up...\n")
@@ -81,13 +88,17 @@ def destroy():
     print ("\nGoodbye.\n")
     exit()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
-        run(host='192.168.100.250', port=80)
+        run(host="0.0.0.0", port=80)
     except ValueError as e:
         print(e)
+        destroy()
     except TypeError as e:
         print(e)
+        destroy()
     except KeyboardInterrupt:
-        sleep(5)
+        print(e)
+        destroy()
+    finally:
         destroy()
