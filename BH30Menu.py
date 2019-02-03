@@ -22,7 +22,6 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #############################################################################
 import RPi.GPIO as GPIO
-import time
 import datetime
 import pytz
 import requests
@@ -70,7 +69,6 @@ GPIO.setup(Button6, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(Button7, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(Button8, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-
 def __init__():
     lcd.clear()
     lcd.display_string("CMC BH-30 Controller", 1)
@@ -88,7 +86,6 @@ def relayOne(self=None):
     sleep(.5)
     if GPIO.input(Relay1) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay1, GPIO.LOW)
         print ("\n80M Low Activated.\n")
         lcd.clear()
@@ -109,7 +106,7 @@ def relayOne(self=None):
         xml_80L = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=80&dxcc=001&limit=5")
         spots_80L = xmltodict.parse(xml_80L.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_80L["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -122,7 +119,7 @@ def relayOne(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 80M Low", 2)
@@ -133,7 +130,6 @@ def relayTwo(self=None):
     sleep(.5)
     if GPIO.input(Relay2) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay2, GPIO.LOW)
         print ("\n80M High Activated.\n")
         lcd.clear()
@@ -154,7 +150,7 @@ def relayTwo(self=None):
         xml_80H = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=80&dxcc=001&limit=5")
         spots_80H = xmltodict.parse(xml_80H.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_80H["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -167,7 +163,7 @@ def relayTwo(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 80M High", 2)
@@ -178,7 +174,6 @@ def relayThree(self=None):
     sleep(.5)
     if GPIO.input(Relay3) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay3, GPIO.LOW)
         print ("\n40M Low Activated.\n")
         lcd.clear()
@@ -199,7 +194,7 @@ def relayThree(self=None):
         xml_40L = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=40&dxcc=001&limit=5")
         spots_40L = xmltodict.parse(xml_40L.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_40L["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -212,7 +207,7 @@ def relayThree(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 40M Low", 2)
@@ -223,7 +218,6 @@ def relayFour(self=None):
     sleep(.5)
     if GPIO.input(Relay4) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay4, GPIO.LOW)
         print ("\n40M High Activated.\n")
         lcd.clear()
@@ -244,7 +238,7 @@ def relayFour(self=None):
         xml_40H = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=40&dxcc=001&limit=5")
         spots_40H = xmltodict.parse(xml_40H.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_40H["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -257,7 +251,7 @@ def relayFour(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 40M High", 2)
@@ -268,7 +262,6 @@ def relayFive(self=None):
     sleep(.5)
     if GPIO.input(Relay5) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay5, GPIO.LOW)
         print ("\n20M Low Activated.\n")
         lcd.clear()
@@ -289,7 +282,7 @@ def relayFive(self=None):
         xml_20L = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=20&dxcc=001&limit=5")
         spots_20L = xmltodict.parse(xml_20L.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_20L["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -302,7 +295,7 @@ def relayFive(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 20M Low", 2)
@@ -313,7 +306,6 @@ def relaySix(self=None):
     sleep(.5)
     if GPIO.input(Relay6) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay6, GPIO.LOW)
         print ("\n20M High Activated.\n")
         lcd.clear()
@@ -334,7 +326,7 @@ def relaySix(self=None):
         xml_20H = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=20&dxcc=001&limit=5")
         spots_20H = xmltodict.parse(xml_20H.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_20H["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -347,7 +339,7 @@ def relaySix(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 20M High", 2)
@@ -358,7 +350,6 @@ def relaySeven(self=None):
     sleep(.5)
     if GPIO.input(Relay7) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay7, GPIO.LOW)
         print ("\n15M Activated.\n")
         lcd.clear()
@@ -379,7 +370,7 @@ def relaySeven(self=None):
         xml_15 = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=15&dxcc=001&limit=5")
         spots_15 = xmltodict.parse(xml_15.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_15["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -392,7 +383,7 @@ def relaySeven(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 15M", 2)
@@ -403,7 +394,6 @@ def relayEight(self=None):
     sleep(.5)
     if GPIO.input(Relay8) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        sleep(.5)
         GPIO.output(Relay8, GPIO.LOW)
         print ("\n10M Activated.\n")
         lcd.clear()
@@ -424,7 +414,7 @@ def relayEight(self=None):
         xml_10 = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=10&dxcc=001&limit=5")
         spots_10 = xmltodict.parse(xml_10.text)
-        time.sleep(3)
+        sleep(5)
         for spots in spots_10["spots"]["spot"]:
             date_string = spots["time"]
             utc = pytz.utc
@@ -437,7 +427,7 @@ def relayEight(self=None):
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            time.sleep(3)
+            sleep(3)
         lcd.clear()
         lcd.display_string("CMC BH-30 Controller", 1)
         lcd.display_string("Tuned to 10M", 2)
