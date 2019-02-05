@@ -31,6 +31,9 @@ import socket
 from time import sleep
 from rpi_displays.sainsmart.displays import LCD2004
 
+progName="CMC BH-30 Controller"
+readyMsg="Ready...      VA3DXV"
+
 lcd=LCD2004()
 
 parser = argparse.ArgumentParser()
@@ -54,7 +57,7 @@ Button6=5
 Button7=25
 Button8=24
 
-relayPins={"Relay1": 11, "Relay2": 12, "Relay3": 13, "Relay4": 14, "Relay5": 15, "Relay6": 16, "Relay7": 17, "Relay8": 18}
+relayPins={"80M Low": 11, "80M High": 12, "40M Low": 13, "40M High": 14, "20M Low": 15, "20M High": 16, "15M": 17, "10M": 18}
 allRelays = list(relayPins.values())
 
 GPIO.setwarnings(False)
@@ -71,8 +74,8 @@ GPIO.setup(Button8, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def __init__():
     lcd.clear()
-    lcd.display_string("CMC BH-30 Controller", 1)
-    lcd.display_string("Ready...      VA3DXV", 4)
+    lcd.display_string(progName, 1)
+    lcd.display_string(readyMsg, 4)
     GPIO.add_event_detect(Button1, GPIO.FALLING, callback=relayOne, bouncetime=500)
     GPIO.add_event_detect(Button2, GPIO.FALLING, callback=relayTwo, bouncetime=500)
     GPIO.add_event_detect(Button3, GPIO.FALLING, callback=relayThree, bouncetime=500)
@@ -82,26 +85,26 @@ def __init__():
     GPIO.add_event_detect(Button7, GPIO.FALLING, callback=relaySeven, bouncetime=500)
     GPIO.add_event_detect(Button8, GPIO.FALLING, callback=relayEight, bouncetime=500)
 
-def relayOne(self=None):
+def relayOne(self=None, band="80M Low"):
     sleep(.5)
     if GPIO.input(Relay1) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay1, GPIO.LOW)
-        print ("\n80M Low Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 80 Low", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 80M Low", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay1) == False:
-        print("\n80M Low is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 80M Low!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_80L = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=80&dxcc=001&limit=5")
@@ -114,38 +117,38 @@ def relayOne(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 80M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 80M Low", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
-def relayTwo(self=None):
+def relayTwo(self=None, band="80M High"):
     sleep(.5)
     if GPIO.input(Relay2) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay2, GPIO.LOW)
-        print ("\n80M High Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 80 High", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 80M High", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay2) == False:
-        print("\n80M High is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 80M High!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_80H = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=80&dxcc=001&limit=5")
@@ -158,38 +161,38 @@ def relayTwo(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 80M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 80M High", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
-def relayThree(self=None):
+def relayThree(self=None, band="40M Low"):
     sleep(.5)
     if GPIO.input(Relay3) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay3, GPIO.LOW)
-        print ("\n40M Low Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 40M Low", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 40M Low", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay3) == False:
-        print("\n40M Low is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 40M Low!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_40L = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=40&dxcc=001&limit=5")
@@ -202,38 +205,38 @@ def relayThree(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 40M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 40M Low", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
-def relayFour(self=None):
+def relayFour(self=None, band="40M High"):
     sleep(.5)
     if GPIO.input(Relay4) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay4, GPIO.LOW)
-        print ("\n40M High Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 40 High", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 40M High", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay4) == False:
-        print("\n40M High is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 40M High!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_40H = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=40&dxcc=001&limit=5")
@@ -246,38 +249,38 @@ def relayFour(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 40M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 40M High", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
-def relayFive(self=None):
+def relayFive(self=None, band="20M Low"):
     sleep(.5)
     if GPIO.input(Relay5) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay5, GPIO.LOW)
-        print ("\n20M Low Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 20M Low", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 20M Low", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay5) == False:
-        print("\n20M Low is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 20M Low!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_20L = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=20&dxcc=001&limit=5")
@@ -290,38 +293,38 @@ def relayFive(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 20M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 20M Low", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
-def relaySix(self=None):
+def relaySix(self=None, band="20M High"):
     sleep(.5)
     if GPIO.input(Relay6) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay6, GPIO.LOW)
-        print ("\n20M High Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 20 High", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 20M High", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay6) == False:
-        print("\n20M High is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 20M High!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_20H = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=20&dxcc=001&limit=5")
@@ -334,38 +337,38 @@ def relaySix(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 20M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 20M High", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to 20M " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
-def relaySeven(self=None):
+def relaySeven(self=None, band="15M"):
     sleep(.5)
     if GPIO.input(Relay7) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay7, GPIO.LOW)
-        print ("\n15M Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 15M", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 15M", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay7) == False:
-        print("\n15M is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 15M!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_15 = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=15&dxcc=001&limit=5")
@@ -378,38 +381,38 @@ def relaySeven(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 15M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 15M", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
-def relayEight(self=None):
+def relayEight(self=None, band="10M"):
     sleep(.5)
     if GPIO.input(Relay8) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay8, GPIO.LOW)
-        print ("\n10M Activated.\n")
+        print (band + " Activated.\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Switching to 10M", 2)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuning " + band, 2)
         lcd.display_string("Wait...", 4)
         sleep(5)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 10M", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     elif GPIO.input(Relay8) == False:
-        print("\n10M is already selected!\n")
+        print(band + " is already selected!\n")
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Already on 10M!", 3)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Already on " + band, 3)
         lcd.display_string("Getting DX spots...", 4)
         xml_10 = requests.get(
             url="http://dxlite.g7vjr.org/?xml=1&band=10&dxcc=001&limit=5")
@@ -422,32 +425,32 @@ def relayEight(self=None):
             utc_datetime = utc.localize(
                 datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
-            lcd.display_string("Last 5 Spots for 10M", 2)
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
             lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
             lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
             sleep(3)
         lcd.clear()
-        lcd.display_string("CMC BH-30 Controller", 1)
-        lcd.display_string("Tuned to 10M", 2)
-        lcd.display_string("Ready...      VA3DXV", 4)
+        lcd.display_string(progName, 1)
+        lcd.display_string("Tuned to " + band, 2)
+        lcd.display_string(readyMsg, 4)
     return
 
 def queryPins(self=None):
     for k,v in relayPins.items():
         if GPIO.input(relayPins[k]) == False:
-            print("\nCurrent relay: " + k + "\n")
+            print("\nCurrent band: " + k + "\n")
             lcd.clear()
-            lcd.display_string("CMC BH-30 Controller", 1)
+            lcd.display_string(progName, 1)
             lcd.display_string(k + " selected.", 2)
-            lcd.display_string("Ready...      VA3DXV", 4)
+            lcd.display_string(readyMsg, 4)
         else:
             continue
 
 def destroy():
     lcd.clear()
-    lcd.display_string("CMC BH-30 Controller", 1)
+    lcd.display_string(progName, 1)
     lcd.display_string("Goodbye.", 3)
     print ("\nCleaning up...\n")
     GPIO.output(allRelays, GPIO.HIGH)
@@ -470,7 +473,7 @@ if __name__ == '__main__':
             print("6. Select 20 Meters High")
             print("7. Select 15 Meters")
             print("8. Select 10 Meters")
-            print("9. Query relays")
+            print("9. Query band")
             print("0. Quit")
             try:
                 selection=int(input("Select an option: "))
