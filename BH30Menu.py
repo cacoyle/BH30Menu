@@ -85,356 +85,147 @@ def __init__():
     GPIO.add_event_detect(Button7, GPIO.FALLING, callback=relaySeven, bouncetime=500)
     GPIO.add_event_detect(Button8, GPIO.FALLING, callback=relayEight, bouncetime=500)
 
-def relayOne(self=None, band="80M Low"):
-    sleep(.5)
+def tuning(band):
+    print("\nTuning to " + band + ".\n")
+    print("Wait for BH-30...\n")
+    lcd.clear()
+    lcd.display_string(progName, 1)
+    lcd.display_string("Tuning to " + band, 2)
+    lcd.display_string("Wait for BH-30...", 4)
+    sleep(5)
+
+def tuned(band):
+    print("Tuned to " + band + "\n")
+    lcd.clear()
+    lcd.display_string(progName, 1)
+    lcd.display_string("Tuned to " + band, 2)
+    lcd.display_string(readyMsg, 4)
+
+def alreadyTuned(band):
+    print("\n" + band + " is already selected!\n")
+    print("Getting DX spots...\n")
+    lcd.clear()
+    lcd.display_string(progName, 1)
+    lcd.display_string("Already on " + band, 3)
+    lcd.display_string("Getting DX spots...", 4)
+
+def getSpots(band, spotband):
+        xml = requests.get(
+            url="http://dxlite.g7vjr.org/?xml=1&band=" + spotband + "&dxcc=001&limit=5")
+        spots = xmltodict.parse(xml.text)
+        sleep(5)
+        print("Last 5 Spots for " + band + "\n")
+        for spots in spots["spots"]["spot"]:
+            date_string = spots["time"]
+            utc = pytz.utc
+            est = pytz.timezone("US/Eastern")
+            utc_datetime = utc.localize(
+                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
+            lcd.clear()
+            lcd.display_string(progName, 1)
+            lcd.display_string("Last 5 Spots for " + band, 2)
+            lcd.display_string(spots["spotter"] + " -> " + spots["dx"], 3)
+            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
+                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
+            print(spots["spotter"] + " -> " + spots["dx"])
+            print(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
+                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"))
+            sleep(3)
+
+def relayOne(self=None, band="80M Low", spotband="80"):
     if GPIO.input(Relay1) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay1, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay1) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_80L = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=80&dxcc=001&limit=5")
-        spots_80L = xmltodict.parse(xml_80L.text)
-        sleep(5)
-        for spots in spots_80L["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
-def relayTwo(self=None, band="80M High"):
-    sleep(.5)
+def relayTwo(self=None, band="80M High", spotband="80"):
     if GPIO.input(Relay2) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay2, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay2) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_80H = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=80&dxcc=001&limit=5")
-        spots_80H = xmltodict.parse(xml_80H.text)
-        sleep(5)
-        for spots in spots_80H["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
-def relayThree(self=None, band="40M Low"):
-    sleep(.5)
+def relayThree(self=None, band="40M Low", spotband="40"):
     if GPIO.input(Relay3) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay3, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay3) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_40L = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=40&dxcc=001&limit=5")
-        spots_40L = xmltodict.parse(xml_40L.text)
-        sleep(5)
-        for spots in spots_40L["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
-def relayFour(self=None, band="40M High"):
-    sleep(.5)
+def relayFour(self=None, band="40M High", spotband="40"):
     if GPIO.input(Relay4) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay4, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay4) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_40H = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=40&dxcc=001&limit=5")
-        spots_40H = xmltodict.parse(xml_40H.text)
-        sleep(5)
-        for spots in spots_40H["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
-def relayFive(self=None, band="20M Low"):
-    sleep(.5)
+def relayFive(self=None, band="20M Low", spotband="20"):
     if GPIO.input(Relay5) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay5, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay5) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_20L = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=20&dxcc=001&limit=5")
-        spots_20L = xmltodict.parse(xml_20L.text)
-        sleep(5)
-        for spots in spots_20L["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
-def relaySix(self=None, band="20M High"):
-    sleep(.5)
+def relaySix(self=None, band="20M High", spotband="20"):
     if GPIO.input(Relay6) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay6, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay6) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_20H = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=20&dxcc=001&limit=5")
-        spots_20H = xmltodict.parse(xml_20H.text)
-        sleep(5)
-        for spots in spots_20H["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to 20M " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
-def relaySeven(self=None, band="15M"):
-    sleep(.5)
+def relaySeven(self=None, band="15M", spotband="15"):
     if GPIO.input(Relay7) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay7, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay7) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_15 = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=15&dxcc=001&limit=5")
-        spots_15 = xmltodict.parse(xml_15.text)
-        sleep(5)
-        for spots in spots_15["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
-def relayEight(self=None, band="10M"):
-    sleep(.5)
+def relayEight(self=None, band="10M", spotband="10"):
     if GPIO.input(Relay8) == True:
         GPIO.output(allRelays, GPIO.HIGH)
         GPIO.output(Relay8, GPIO.LOW)
-        print (band + " Activated.\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuning " + band, 2)
-        lcd.display_string("Wait...", 4)
-        sleep(5)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        tuning(band)
+        tuned(band)
     elif GPIO.input(Relay8) == False:
-        print(band + " is already selected!\n")
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Already on " + band, 3)
-        lcd.display_string("Getting DX spots...", 4)
-        xml_10 = requests.get(
-            url="http://dxlite.g7vjr.org/?xml=1&band=10&dxcc=001&limit=5")
-        spots_10 = xmltodict.parse(xml_10.text)
-        sleep(5)
-        for spots in spots_10["spots"]["spot"]:
-            date_string = spots["time"]
-            utc = pytz.utc
-            est = pytz.timezone("US/Eastern")
-            utc_datetime = utc.localize(
-                datetime.datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S"))
-            lcd.clear()
-            lcd.display_string(progName, 1)
-            lcd.display_string("Last 5 Spots for " + band, 2)
-            lcd.display_string(spots["spotter"] + "->" + spots["dx"], 3)
-            lcd.display_string(spots["frequency"].split(".")[0] + " - " + utc_datetime.astimezone(
-                est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"), 4)
-            sleep(3)
-        lcd.clear()
-        lcd.display_string(progName, 1)
-        lcd.display_string("Tuned to " + band, 2)
-        lcd.display_string(readyMsg, 4)
+        alreadyTuned(band)
+        getSpots(band, spotband)
+        tuned(band)
     return
 
 def queryPins(self=None):
@@ -512,6 +303,8 @@ if __name__ == '__main__':
                 print("\nInvalid choice. Enter 1-9.\n")
             except TypeError as e:
                 print("\nInvalid choice. Enter 1-9.\n")
+            except NameError as e:
+                print("\nInvalid choice. Enter 1-9.\n")
             except KeyboardInterrupt:
                 destroy()
 
@@ -519,8 +312,10 @@ if __name__ == '__main__':
             try:
                 sleep(0.1)
             except ValueError as e:
-                print("\nInvalid choice. Enter 1-9.\n")
+                sleep(0.1)
             except TypeError as e:
-                print("\nInvalid choice. Enter 1-9.\n")
+                sleep(0.1)
+            except NameError as e:
+                sleep(0.1)
             except KeyboardInterrupt:
                 destroy()
