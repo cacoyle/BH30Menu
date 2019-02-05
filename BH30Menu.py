@@ -40,50 +40,72 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-cli", help="Enable CLI menu.", action="store_true", default=False)
 args = parser.parse_args()
 
-Relay1=11
-Relay2=12
-Relay3=13
-Relay4=14
-Relay5=15
-Relay6=16
-Relay7=17
-Relay8=18
-Button1=21
-Button2=20
-Button3=26
-Button4=19
-Button5=6
-Button6=5
-Button7=25
-Button8=24
+relayBounceTime = 500
 
-relayPins={"80M Low": 11, "80M High": 12, "40M Low": 13, "40M High": 14, "20M Low": 15, "20M High": 16, "15M": 17, "10M": 18}
-allRelays = list(relayPins.values())
+relayPins={
+    11: {
+        "button": 21,
+        "band": "80M Low",
+        "spotband": "80"
+    },
+    12: {
+        "button": 20,
+        "band": "80M High",
+        "spotband": "80"
+    },
+    13: {
+        "button": 26,
+        "band": "40M Low",
+        "spotband": "40"
+    },
+    14: {
+        "button": 19,
+        "band": "40M High",
+        "spotband": "40"
+    },
+    15: {
+        "button": 6,
+        "band": "20M Low",
+        "spotband": "20"
+    },
+    16: {
+        "button": 5,
+        "band": "20M High",
+        "spotband": "20"
+    },
+    17: {
+        "button": 25,
+        "band": "15M",
+        "spotband": "15"
+    },
+    18: {
+        "button": 24,
+        "band": "10M",
+        "spotband": "10"
+    }
+}
+allRelays = list(relayPins.keys())
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(allRelays, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(Button1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Button2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Button3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Button4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Button5, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Button6, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Button7, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Button8, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(
+    [relayPins[x]["button"] for x in relayPins],
+    GPIO.IN,
+    pull_up_down=GPIO.PUD_UP
+)
 
 def __init__():
     lcd.clear()
     lcd.display_string(progName, 1)
     lcd.display_string(readyMsg, 4)
-    GPIO.add_event_detect(Button1, GPIO.FALLING, callback=relayOne, bouncetime=500)
-    GPIO.add_event_detect(Button2, GPIO.FALLING, callback=relayTwo, bouncetime=500)
-    GPIO.add_event_detect(Button3, GPIO.FALLING, callback=relayThree, bouncetime=500)
-    GPIO.add_event_detect(Button4, GPIO.FALLING, callback=relayFour, bouncetime=500)
-    GPIO.add_event_detect(Button5, GPIO.FALLING, callback=relayFive, bouncetime=500)
-    GPIO.add_event_detect(Button6, GPIO.FALLING, callback=relaySix, bouncetime=500)
-    GPIO.add_event_detect(Button7, GPIO.FALLING, callback=relaySeven, bouncetime=500)
-    GPIO.add_event_detect(Button8, GPIO.FALLING, callback=relayEight, bouncetime=500)
+    for relay in relayPins:
+        GPIO.add_event_detect(
+            relay["button"],
+            GPIO.FALLING,
+            callback=relayPress(relayNum=relay),
+            bouncetime=relayBounceTime
+        )
 
 def tuning(band):
     print("\nTuning to " + band + ".\n")
@@ -132,97 +154,15 @@ def getSpots(band, spotband):
                 est).strftime("%d %b ") + utc_datetime.astimezone(est).strftime("%H:%M"))
             sleep(3)
 
-def relayOne(self=None, band="80M Low", spotband="80"):
-    if GPIO.input(Relay1) == True:
+def relayPress(self=None, relayNum=None):
+    band = relayPins[relayNum]["band"]
+    spotband = relayPins[relayNum]["spotband"]
+    if GPIO.input(relayNum) == True:
         GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay1, GPIO.LOW)
+        GPIO.output(relayNum, GPIO.LOW)
         tuning(band)
         tuned(band)
-    elif GPIO.input(Relay1) == False:
-        alreadyTuned(band)
-        getSpots(band, spotband)
-        tuned(band)
-    return
-
-def relayTwo(self=None, band="80M High", spotband="80"):
-    if GPIO.input(Relay2) == True:
-        GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay2, GPIO.LOW)
-        tuning(band)
-        tuned(band)
-    elif GPIO.input(Relay2) == False:
-        alreadyTuned(band)
-        getSpots(band, spotband)
-        tuned(band)
-    return
-
-def relayThree(self=None, band="40M Low", spotband="40"):
-    if GPIO.input(Relay3) == True:
-        GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay3, GPIO.LOW)
-        tuning(band)
-        tuned(band)
-    elif GPIO.input(Relay3) == False:
-        alreadyTuned(band)
-        getSpots(band, spotband)
-        tuned(band)
-    return
-
-def relayFour(self=None, band="40M High", spotband="40"):
-    if GPIO.input(Relay4) == True:
-        GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay4, GPIO.LOW)
-        tuning(band)
-        tuned(band)
-    elif GPIO.input(Relay4) == False:
-        alreadyTuned(band)
-        getSpots(band, spotband)
-        tuned(band)
-    return
-
-def relayFive(self=None, band="20M Low", spotband="20"):
-    if GPIO.input(Relay5) == True:
-        GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay5, GPIO.LOW)
-        tuning(band)
-        tuned(band)
-    elif GPIO.input(Relay5) == False:
-        alreadyTuned(band)
-        getSpots(band, spotband)
-        tuned(band)
-    return
-
-def relaySix(self=None, band="20M High", spotband="20"):
-    if GPIO.input(Relay6) == True:
-        GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay6, GPIO.LOW)
-        tuning(band)
-        tuned(band)
-    elif GPIO.input(Relay6) == False:
-        alreadyTuned(band)
-        getSpots(band, spotband)
-        tuned(band)
-    return
-
-def relaySeven(self=None, band="15M", spotband="15"):
-    if GPIO.input(Relay7) == True:
-        GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay7, GPIO.LOW)
-        tuning(band)
-        tuned(band)
-    elif GPIO.input(Relay7) == False:
-        alreadyTuned(band)
-        getSpots(band, spotband)
-        tuned(band)
-    return
-
-def relayEight(self=None, band="10M", spotband="10"):
-    if GPIO.input(Relay8) == True:
-        GPIO.output(allRelays, GPIO.HIGH)
-        GPIO.output(Relay8, GPIO.LOW)
-        tuning(band)
-        tuned(band)
-    elif GPIO.input(Relay8) == False:
+    elif GPIO.input(relayNum) == False:
         alreadyTuned(band)
         getSpots(band, spotband)
         tuned(band)
@@ -230,8 +170,8 @@ def relayEight(self=None, band="10M", spotband="10"):
 
 def queryPins(self=None):
     for k,v in relayPins.items():
-        if GPIO.input(relayPins[k]) == False:
-            print("\nCurrent band: " + k + "\n")
+        if GPIO.input(k) == False:
+            print("\nCurrent band: " + v["band"] + "\n")
             lcd.clear()
             lcd.display_string(progName, 1)
             lcd.display_string(k + " selected.", 2)
@@ -269,28 +209,28 @@ if __name__ == '__main__':
             try:
                 selection=int(input("Select an option: "))
                 if selection==1:
-                    relayOne()
+                    relayPress(relayNum=11)
                     continue
                 elif selection==2:
-                    relayTwo()
+                    relayPress(relayNum=12)
                     continue
                 elif selection==3:
-                    relayThree()
+                    relayPress(relayNum=13)
                     continue
                 elif selection==4:
-                    relayFour()
+                    relayPress(relayNum=14)
                     continue
                 elif selection==5:
-                    relayFive()
+                    relayPress(relayNum=15)
                     continue
                 elif selection==6:
-                    relaySix()
+                    relayPress(relayNum=16)
                     continue
                 elif selection==7:
-                    relaySeven()
+                    relayPress(relayNum=17)
                     continue
                 elif selection==8:
-                    relayEight()
+                    relayPress(relayNum=18)
                     continue
                 elif selection==9:
                     queryPins()
